@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,31 +8,31 @@
     <title>Document</title>
 </head>
 <style>
-.container {
-    border: black solid;
-    height: 1000px;
-    width: 1000px;
-}
+    .container {
+        border: black solid;
+        height: 1000px;
+        width: 1000px;
+    }
 
-.deck {
-    border: black solid;
-    height: 200px;
-    width: 150px;
-}
+    .deck {
+        border: black solid;
+        height: 200px;
+        width: 150px;
+    }
 
-.player-deck {
+    .player-deck {
 
-    margin: 50px;
-    margin-right: 500px;
-    float: left;
-}
+        margin: 50px;
+        margin-right: 500px;
+        float: left;
+    }
 
-.computer-deck {
-    float: left;
-    margin-top: 50px;
-}
-
+    .computer-deck {
+        float: left;
+        margin-top: 50px;
+    }
 </style>
+
 <body>
     <div class="container">
         <div class="deck player-deck">
@@ -43,7 +44,6 @@
     </div>
 
     <script>
-
         shuffle = (cardDeck) => {
 
             let cardDeckTemp = cardDeck;
@@ -53,30 +53,38 @@
             let playerDeck = cardDeckTemp.slice(0, cardDeckTemp.length / 2);
             let computerDeck = cardDeckTemp.slice(cardDeckTemp.length / 2, cardDeckTemp.length);
 
-            return {"playerDeck": playerDeck, "computerDeck": computerDeck};
+            return {
+                "playerDeck": playerDeck,
+                "computerDeck": computerDeck
+            };
         }
-    
-        let cardDeck = [];
 
-        let numberDeck = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+        createDeck = () => {
+            let cardDeck = [];
 
-        let nonNumberDeck = ["J", "Q", "K", "A"];
+            let numberDeck = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-        let suites = ["C", "S", "H", "D"];
+            let nonNumberDeck = ["J", "Q", "K", "A"];
 
-        for (let i = 0; i < suites.length; i++) {
-            for (let j = 0; j < numberDeck.length; j++) {
-                cardDeck.push(numberDeck[j] + suites[i]);
-            } 
+            let suites = ["C", "S", "H", "D"];
 
-            for (let x = 0; x < nonNumberDeck.length; x++) {
-                cardDeck.push(nonNumberDeck[x] + suites[i])   
+            for (let i = 0; i < suites.length; i++) {
+                for (let j = 0; j < numberDeck.length; j++) {
+                    cardDeck.push(numberDeck[j] + suites[i]);
+                }
+                for (let x = 0; x < nonNumberDeck.length; x++) {
+                    cardDeck.push(nonNumberDeck[x] + suites[i])
+                }
             }
+
+            return cardDeck;
         }
+
+        let cardDeck = createDeck();
 
         console.log(shuffle(cardDeck))
-    
     </script>
 
 </body>
+
 </html>
