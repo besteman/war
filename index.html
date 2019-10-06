@@ -43,6 +43,18 @@
     </div>
 
     <script>
+
+        shuffle = (cardDeck) => {
+
+            let cardDeckTemp = cardDeck;
+
+            cardDeckTemp.sort(() => Math.random() - 0.5);
+
+            let playerDeck = cardDeckTemp.slice(0, cardDeckTemp.length / 2);
+            let computerDeck = cardDeckTemp.slice(cardDeckTemp.length / 2, cardDeckTemp.length);
+
+            return {"playerDeck": playerDeck, "computerDeck": computerDeck};
+        }
     
         let cardDeck = [];
 
@@ -62,7 +74,7 @@
             }
         }
 
-        console.log(cardDeck)
+        console.log(shuffle(cardDeck))
     
     </script>
 
