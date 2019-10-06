@@ -6,48 +6,76 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+
 </head>
 <style>
-    .container {
+    .main {
         border: black solid;
-        height: 1000px;
-        width: 1000px;
+        height: 500px;
+        margin-top: 50px;
     }
 
     .deck {
         border: black solid;
-        height: 200px;
-        width: 150px;
-        overflow:hidden;
+        overflow: hidden;
+        height: 300px;
     }
 
     .deck-cards {
-        height: 90%;
+        height: 100%;
         width: 100%;
         object-fit: contain;
-        margin-top: 10px;
     }
 
     .player-deck {
-
         margin: 50px;
-        margin-right: 500px;
-        float: left;
     }
 
     .computer-deck {
-        float: left;
-        margin-top: 50px;
+        margin: 50px;
     }
+
+    .player-score {
+        margin-right: 100px;
+    }
+
+    /* .computer-score {
+        margin-left: 50px;
+    } */
+
+    .score-row {
+        margin-bottom: 15px;
+    }
+
 </style>
 
 <body>
-    <div class="container">
-        <div class="deck player-deck" id="player-deck">
+    <div class="container main">
+        <div class="row justify-content-center">
+            <div class="col-3 deck player-deck">
+               
+            </div>
 
+            <div class="col-3 deck computer-deck">
+               
+            </div>
         </div>
-        <div class="deck computer-deck">
-
+        <div class="row justify-content-center score-row">
+            <div class="col-3 player-score">
+                
+            </div>
+            <div class="col-3 computer-score">
+                
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-1">
+                <button class="btn btn-info" id="play">Play</button>
+            </div>
         </div>
     </div>
 
@@ -88,12 +116,39 @@
             };
         }
 
-        placeCard = () => {
+        calculateValueToNumber = (card) => {
+            let cardValue;
+
+            if (!isNaN(parseInt(card))) {
+                card = parseInt(card)
+            }
+            
+            switch (card) {
+                case 1:
+                    cardValue = 10;
+                    break;
+                case "J":
+                    cardValue = 11;
+                    break;
+                case "Q":
+                    cardValue = 12;
+                    break;
+                case "K":
+                    cardValue = 13;
+                    break;
+                case "A":
+                    cardValue = 14;
+                    break;
+                default:
+                    cardValue = card;
+            }
+            return cardValue;
+        }
+
+        placeCard = (card, playerPlaying) => {
             let filePath = "assets/images/"
 
-            let filePathForCard = filePath + temp + ".jpg"
-
-            console.log(filePathForCard);
+            let filePathForCard = filePath + card[0] + ".jpg"
 
             let imgTag = document.createElement("img");
 
@@ -101,26 +156,74 @@
 
             imgTag.setAttribute("class", "deck-cards");
 
-            console.log(imgTag)
+            let playerDeckDiv;
 
-            let playerDeckDiv = document.getElementsByClassName("player-deck")[0];
+            cardValue = calculateValueToNumber(card[0][0]);
 
-            playerDeckDiv.appendChild(imgTag);
+            if (playerPlaying === "player") {
+                playerDeckDiv = document.getElementsByClassName("player-deck")[0];
+                imgTag.setAttribute("id", "player")
+                imgTag.setAttribute("player-card-value", cardValue)
+            } else {
+                playerDeckDiv = document.getElementsByClassName("computer-deck")[0];
+                imgTag.setAttribute("id", "computer")
+                imgTag.setAttribute("computer-card-value", cardValue)
+            }
+
+            let oldImgTag = document.getElementById(playerPlaying)
+            
+            if (oldImgTag === null) {
+                playerDeckDiv.appendChild(imgTag);
+            } else {
+                if (playerPlaying === "player") {
+                    oldImgTag = document.getElementById("player");
+                    playerDeckDiv.replaceChild(imgTag, oldImgTag);
+                } else {
+                    oldImgTag = document.getElementById("computer");
+                    playerDeckDiv.replaceChild(imgTag, oldImgTag);
+                }
+            }
+        }
+
+        playCard = (deckObject) => {
+            placeCard(deckObject.playerDeck, "player")
+            placeCard(deckObject.computerDeck, "computer")
+            
+        }
+
+        calculateTurn = () => {
+            let playerCard = parseInt(document.getElementById("player").getAttribute("player-card-value"));
+            let computerCard = parseInt(document.getElementById("computer").getAttribute("computer-card-value"));
+
+            if (playerCard > computerCard) {
+                console.log("Player Wins");
+                deckObject.playerDeck.push(deckObject.computerDeck[0])
+                deckObject.playerDeck.push(deckObject.playerDeck.shift());
+                deckObject.computerDeck.shift();
+        
+            } else {
+                deckObject.computerDeck.push(deckObject.playerDeck[0])
+                deckObject.computerDeck.push(deckObject.computerDeck.shift());
+                deckObject.playerDeck.shift();
+                console.log("Computer Wins");
+            }
+            
+            let playerScore = document.getElementsByClassName("player-score")[0];
+            let computerScore = document.getElementsByClassName("computer-score")[0];
+            playerScore.innerHTML = `Player Deck is ${deckObject.playerDeck.length}`;
+            computerScore.innerHTML = `Player Deck is ${deckObject.computerDeck.length}`;
         }
 
         let cardDeck = createDeck();
 
         let deckObject = shuffle(cardDeck);
 
-        console.log(deckObject);
-
         let temp = deckObject.playerDeck[0];
 
-        console.log(temp);
-
-
-
-
+        document.getElementById("play").addEventListener("click", function(){
+            playCard(deckObject);
+            calculateTurn();
+        });
 
     </script>
 
