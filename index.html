@@ -18,6 +18,14 @@
         border: black solid;
         height: 200px;
         width: 150px;
+        overflow:hidden;
+    }
+
+    .deck-cards {
+        height: 90%;
+        width: 100%;
+        object-fit: contain;
+        margin-top: 10px;
     }
 
     .player-deck {
@@ -35,7 +43,7 @@
 
 <body>
     <div class="container">
-        <div class="deck player-deck">
+        <div class="deck player-deck" id="player-deck">
 
         </div>
         <div class="deck computer-deck">
@@ -44,21 +52,6 @@
     </div>
 
     <script>
-        shuffle = (cardDeck) => {
-
-            let cardDeckTemp = cardDeck;
-
-            cardDeckTemp.sort(() => Math.random() - 0.5);
-
-            let playerDeck = cardDeckTemp.slice(0, cardDeckTemp.length / 2);
-            let computerDeck = cardDeckTemp.slice(cardDeckTemp.length / 2, cardDeckTemp.length);
-
-            return {
-                "playerDeck": playerDeck,
-                "computerDeck": computerDeck
-            };
-        }
-
         createDeck = () => {
             let cardDeck = [];
 
@@ -80,9 +73,55 @@
             return cardDeck;
         }
 
+        shuffle = (cardDeck) => {
+
+            let cardDeckTemp = cardDeck;
+
+            cardDeckTemp.sort(() => Math.random() - 0.5);
+
+            let playerDeck = cardDeckTemp.slice(0, cardDeckTemp.length / 2);
+            let computerDeck = cardDeckTemp.slice(cardDeckTemp.length / 2, cardDeckTemp.length);
+
+            return {
+                "playerDeck": playerDeck,
+                "computerDeck": computerDeck
+            };
+        }
+
+        placeCard = () => {
+            let filePath = "assets/images/"
+
+            let filePathForCard = filePath + temp + ".jpg"
+
+            console.log(filePathForCard);
+
+            let imgTag = document.createElement("img");
+
+            imgTag.src = filePathForCard;
+
+            imgTag.setAttribute("class", "deck-cards");
+
+            console.log(imgTag)
+
+            let playerDeckDiv = document.getElementsByClassName("player-deck")[0];
+
+            playerDeckDiv.appendChild(imgTag);
+        }
+
         let cardDeck = createDeck();
 
-        console.log(shuffle(cardDeck))
+        let deckObject = shuffle(cardDeck);
+
+        console.log(deckObject);
+
+        let temp = deckObject.playerDeck[0];
+
+        console.log(temp);
+
+
+
+
+
     </script>
 
 </body>
